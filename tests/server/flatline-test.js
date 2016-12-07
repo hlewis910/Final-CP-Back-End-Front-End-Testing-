@@ -3,6 +3,7 @@ import sinon from 'sinon';
 
 import {groupBy, flowRight} from '../../server/flatline';
 
+/**** These are based off of lodash methods. Reference lodash docs to clarify each method purpose. ****/
 describe('flatline', () => {
 
     describe('groupBy function', () => {
