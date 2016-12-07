@@ -4,15 +4,15 @@ Welcome to your final checkpoint at Fullstack Academy!
 
 Except for existing *codebases* (from workshops / checkpoints / projects you've done, or library / solution code), you are allowed to use any resources you'd like. That includes all documentation and workshop *instructions*.
 
-Please make sure you complete specs located in the following files:
+Please make sure you complete specs located in the following files, and in the following order:
 
 `tests/server/backend-tests.js`
 
-`tests/server/flatline-test.js`
-
 `tests/react/react-tests.js`
 
-#### This is the recommended order in which you complete each test; however, they do not depend on eachother! If you get stuck or want to work in a different order, you should be able to.
+`tests/server/flatline-test.js`
+
+#### This is the recommended order in which you complete each test; however, they do not depend on each other! If you get stuck or want to work in a different order, you should be able to.
 
 ## Getting started
 
