@@ -22,13 +22,13 @@ Please make sure you complete specs located in the following files, and in the f
 npm install
 ```
 
-To run server tests:
+To run **server** tests:
 
 ```bash
 npm test
 ```
 
-To run browser tests:
+To run **browser** tests:
 
 ```bash
 npm run react-test
