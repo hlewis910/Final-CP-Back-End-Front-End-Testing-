@@ -3,6 +3,7 @@ const User = db.model('user');
 const Message = db.model('message');
 import app from '../../server/app';
 
+import fsMisc from 'fs-misc';
 import chai from 'chai';
 import chaiProperties from 'chai-properties';
 import chaiThings from 'chai-things';
@@ -13,6 +14,10 @@ import supertest from 'supertest-as-promised';
 import sinon from 'sinon';
 
 describe('▒▒▒ Backend tests ▒▒▒', () => {
+
+    before('Create the test database', () => {
+        return fsMisc.pgInit('checkpoint_senior');
+    });
 
     beforeEach('Synchronize and clear database', () => db.sync({force: true}));
 
