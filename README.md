@@ -4,13 +4,13 @@ Welcome to your final checkpoint at Fullstack Academy!
 
 Except for existing *codebases* (from workshops / checkpoints / projects you've done, or library / solution code), you are allowed to use any resources you'd like. That includes all documentation and workshop *instructions*.
 
-Please make sure you complete specs located in the following files, and in the following order:
+Please make sure you complete specs located in the following files:
 
-`tests/server/backend-tests.js`
+`tests/01-backend/backend-tests.js`
 
-`tests/react/react-tests.js`
+`tests/02-react/react-tests.js`
 
-`tests/server/flatline-test.js`
+`tests/03-js/flatline-test.js`
 
 #### This is the recommended order in which you complete each test; however, they do not depend on each other! If you get stuck or want to work in a different order, you should be able to.
 
@@ -36,7 +36,7 @@ npm run react-test
 
 ## Extra Credit
 
-For the brave, the extra credit (implementing Promise.map) is available in `tests/extra-credit`. Run with `npm run extra-credit`.
+For the brave, the extra credit (implementing Promise.map) is available in `tests/04-extra-credit`. Run with `npm run extra-credit`.
 
 ## Submit
 

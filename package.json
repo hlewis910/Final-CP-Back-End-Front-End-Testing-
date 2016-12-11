@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "author": "Fullstack Instructors",
   "scripts": {
-    "test": "mocha ./tests/server --watch --compilers js:babel-register",
+    "test": "mocha ./tests --recursive --watch --compilers js:babel-register",
+    "server-test": "mocha ./tests/server --watch --compilers js:babel-register",
     "react-test": "mocha ./tests/react --watch --compilers js:babel-register",
     "extra-credit": "mocha ./tests/extra-credit --watch --compilers js:babel-register",
     "db-init": "pg-init senior_checkpoint",
