@@ -99,51 +99,51 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
             describe('functionality', () => {
 
-                let bobId;
-                let joanId;
+                let annaId;
+                let elsaId;
                 beforeEach('Seed users', () => {
                     const users = [
-                        {email: 'bob@gmail.com'},
-                        {email: 'joan@gmail.com'}
+                        {email: 'anna@gmail.com'},
+                        {email: 'elsa@gmail.com'}
                     ];
                     return User.bulkCreate(users, {returning: true})
                         .then(createdUsers => {
-                            bobId = createdUsers[0].id;
-                            joanId = createdUsers[1].id;
+                            annaId = createdUsers[0].id;
+                            elsaId = createdUsers[1].id;
                         });
                 });
 
-                let bobFirstMessage;
-                let joanFirstMessage;
-                let bobSecondMessage;
+                let annaFirstMessage;
+                let elsaFirstMessage;
+                let annaSecondMessage;
                 beforeEach('Seed messages', () => {
 
                     const messages = [
                         {
-                            toId: joanId,
-                            fromId: bobId,
-                            subject: 'Hey Joan!',
-                            body: 'Coming to Jimmy\'s birthday tomorrow?'
+                            toId: elsaId,
+                            fromId: annaId,
+                            subject: 'Hey Elsa!',
+                            body: 'Do you wanna build a snowman?'
                         },
                         {
-                            toId: bobId,
-                            fromId: joanId,
-                            subject: 'Re: Hey Joan!',
-                            body: 'How dare you, Bob.'
+                            toId: annaId,
+                            fromId: elsaId,
+                            subject: 'Re: Hey Elsa!',
+                            body: 'Go away, Anna.'
                         },
                         {
-                            toId: joanId,
-                            fromId: bobId,
-                            subject: 'Re: Re: Hey Joan!',
-                            body: 'wat'
+                            toId: elsaId,
+                            fromId: annaId,
+                            subject: 'Re: Re: Hey Elsa!',
+                            body: 'Okay, bye…'
                         }
                     ];
 
                     return Message.bulkCreate(messages, {returning: true})
                         .then(createdMessages => {
-                            bobFirstMessage = createdMessages[0].id;
-                            joanFirstMessage = createdMessages[1].id;
-                            bobSecondMessage = createdMessages[2].id;
+                            annaFirstMessage = createdMessages[0].id;
+                            elsaFirstMessage = createdMessages[1].id;
+                            annaSecondMessage = createdMessages[2].id;
                         });
 
                 });
@@ -159,23 +159,23 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                         });
 
                         xit('returns a promise', () => {
-                            expect(Message.getAllWhereSender(bobId).then).to.be.a('function');
+                            expect(Message.getAllWhereSender(annaId).then).to.be.a('function');
                         });
 
-                        xit('resolves to all the messages sent by Bob', () => {
-                            return Message.getAllWhereSender(bobId)
+                        xit('resolves to all the messages sent by Anna', () => {
+                            return Message.getAllWhereSender(annaId)
                                 .then(messages => {
                                     expect(messages.length).to.be.equal(2);
-                                    expect(messages).to.contain.a.thing.with.property('id', bobFirstMessage);
-                                    expect(messages).to.contain.a.thing.with.property('id', bobSecondMessage);
+                                    expect(messages).to.contain.a.thing.with.property('id', annaFirstMessage);
+                                    expect(messages).to.contain.a.thing.with.property('id', annaSecondMessage);
                                 });
                         });
 
-                        xit('resolves to all the messages sent by Joan', () => {
-                            return Message.getAllWhereSender(joanId)
+                        xit('resolves to all the messages sent by Elsa', () => {
+                            return Message.getAllWhereSender(elsaId)
                                 .then(messages => {
                                     expect(messages.length).to.be.equal(1);
-                                    expect(messages[0].id).to.be.equal(joanFirstMessage);
+                                    expect(messages[0].id).to.be.equal(elsaFirstMessage);
                                 });
                         });
 
@@ -185,7 +185,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                             // http://docs.sequelizejs.com/en/latest/docs/models-usage/#eager-loading
                             // Don't forget about the aliases explained in server/models/index.js!
 
-                            return Message.getAllWhereSender(joanId)
+                            return Message.getAllWhereSender(elsaId)
                                 .then(messages => {
 
                                     const theMessage = messages[0];
@@ -196,8 +196,8 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                                     // Expect the email properties of those objects to match up to the
                                     // associated users who sent/received the message.
-                                    expect(theMessage.to.email).to.be.equal('bob@gmail.com');
-                                    expect(theMessage.from.email).to.be.equal('joan@gmail.com');
+                                    expect(theMessage.to.email).to.be.equal('anna@gmail.com');
+                                    expect(theMessage.from.email).to.be.equal('elsa@gmail.com');
 
                                 });
                         });
@@ -213,10 +213,10 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                         let testMessage;
                         beforeEach(() => {
                             testMessage = Message.build({
-                                subject: 'Hey friendo! There is a something I would like to share with you.',
-                                from: bobId,
-                                to: joanId,
-                                body: 'Lorem ipsum baseball'
+                                from: annaId,
+                                to: elsaId,
+                                subject: `I don't know if I'm elated or gassy`,
+                                body: `But I'm somewhere in that zone`
                             });
                         });
 
@@ -227,14 +227,14 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                         xit('returns the full message object but with a limited subject text based on a passed in number to determine its length', () => {
                             // Here we are expecting that the *return value* of .truncateSubject()
                             // is *full instance object of message* with its .subject property altered.
-                            const messageWithTruncatedSubject = testMessage.truncateSubject(6);
+                            const messageWithTruncatedSubject = testMessage.truncateSubject(12);
                             expect(messageWithTruncatedSubject).to.be.an('object');
-                            expect(messageWithTruncatedSubject.body).to.be.equal('Lorem ipsum baseball');
-                            expect(messageWithTruncatedSubject.subject).to.be.equal('Hey fr');
+                            expect(messageWithTruncatedSubject.body).to.be.equal(`But I'm somewhere in that zone`);
+                            expect(messageWithTruncatedSubject.subject).to.be.equal(`I don't know`);
                         });
 
                         xit('adds an ellipses (...) after the truncated text if true is passed as the second argument', () => {
-                            expect(testMessage.truncateSubject(12, true).subject).to.be.equal('Hey friendo!...');
+                            expect(testMessage.truncateSubject(4, true).subject).to.be.equal('I do...');
                         });
 
                     });
