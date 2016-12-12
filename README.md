@@ -25,7 +25,7 @@ npm install
 To run **server** tests:
 
 ```bash
-npm server-test
+npm run server-test
 ```
 
 To run **browser** tests:
