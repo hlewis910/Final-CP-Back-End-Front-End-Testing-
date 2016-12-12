@@ -15,10 +15,6 @@ import sinon from 'sinon';
 
 describe('▒▒▒ Backend tests ▒▒▒', () => {
 
-    before('Create the test database', () => {
-        return fsMisc.pgInit('checkpoint_senior');
-    });
-
     beforeEach('Synchronize and clear database', () => db.sync({force: true}));
 
     after('Synchronize and clear database', () => db.sync({force: true}));

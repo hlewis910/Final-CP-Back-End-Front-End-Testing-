@@ -7,7 +7,9 @@
     "server-test": "mocha ./tests/01-backend --watch --compilers js:babel-register",
     "react-test": "mocha ./tests/02-react --watch --compilers js:babel-register",
     "js-test": "mocha ./tests/03-js --watch --compilers js:babel-register",
-    "extra-credit": "mocha ./tests/04-extra-credit --watch --compilers js:babel-register"
+    "extra-credit": "mocha ./tests/04-extra-credit --watch --compilers js:babel-register",
+    "db-init": "pg-init checkpoint_senior",
+    "postinstall": "npm run db-init"
   },
   "devDependencies": {
     "babel-core": "^6.17.0",
