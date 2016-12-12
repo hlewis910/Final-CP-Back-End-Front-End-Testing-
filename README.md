@@ -16,22 +16,25 @@ Please make sure you complete specs located in the following files:
 
 ## Getting started
 
-**Fork** and clone this repository. Then...
+**Fork** and clone this repository. Then execute the following to run all tests:
 
 ```bash
 npm install
 ```
 
-To run **server** tests:
+To run only _specific_ test suites, you can optionally do any of the following:
 
 ```bash
 npm run server-test
+npm run react-test
+npm run js-test
+npm run extra-credit
 ```
 
-To run **browser** tests:
+To only run a specific `describe` or `it`, you can also chain `.only`:
 
-```bash
-npm run react-test
+```js
+it.only('does something', testFunc);
 ```
 
 ## Extra Credit
