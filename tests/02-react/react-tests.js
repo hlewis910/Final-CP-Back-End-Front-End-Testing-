@@ -16,6 +16,7 @@ import Inbox from '../../react/components/Inbox';
 import NewMessageForm from '../../react/components/NewMessageForm';
 import rootReducer from '../../react/redux/reducer';
 import actualStore from '../../react/redux/store';
+import {MESSAGES_RECEIVED, MESSAGES_LOADING, NEW_MESSAGE} from '../../react/redux/constants';
 import {createLoadingAction, createMessagesReceivedAction, createNewMessageAction} from '../../react/redux/actions';
 
 const createRandomMessages = amount => {
@@ -218,7 +219,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const actionDescriptor = createMessagesReceivedAction(messages);
 
                     expect(actionDescriptor).to.be.deep.equal({
-                        type: 'MESSAGES_RECEIVED',
+                        type: MESSAGES_RECEIVED,
                         messages: messages
                     });
 
@@ -233,7 +234,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const actionDescriptor = createLoadingAction();
 
                     expect(actionDescriptor).to.be.deep.equal({
-                        type: 'MESSAGES_LOADING'
+                        type: MESSAGES_LOADING
                     });
 
                 });
@@ -249,7 +250,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const actionDescriptor = createNewMessageAction(message);
 
                     expect(actionDescriptor).to.be.deep.equal({
-                        type: 'NEW_MESSAGE',
+                        type: NEW_MESSAGE,
                         message: message
                     });
 
@@ -277,7 +278,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                 xit('affects state by setting messagesLoading to true and messages to empty array', () => {
 
                     testingStore.dispatch({
-                        type: 'MESSAGES_LOADING'
+                        type: MESSAGES_LOADING
                     });
 
                     const newState = testingStore.getState();
@@ -292,7 +293,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const currentStoreState = testingStore.getState();
 
                     testingStore.dispatch({
-                        type: 'MESSAGES_LOADING'
+                        type: MESSAGES_LOADING
                     });
 
                     const subsequentStoreState = testingStore.getState();
@@ -310,7 +311,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const randomMessages = testUtilities.createRandomMessages(10);
 
                     testingStore.dispatch({
-                        type: 'MESSAGES_RECEIVED',
+                        type: MESSAGES_RECEIVED,
                         messages: randomMessages
                     });
 
@@ -339,7 +340,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const dispatchedMessage = testUtilities.createOneRandomMessage();
 
                     testingStore.dispatch({
-                        type: 'NEW_MESSAGE',
+                        type: NEW_MESSAGE,
                         message: dispatchedMessage
                     });
 
@@ -357,7 +358,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const dispatchedMessage = testUtilities.createOneRandomMessage();
 
                     testingStore.dispatch({
-                        type: 'NEW_MESSAGE',
+                        type: NEW_MESSAGE,
                         message: dispatchedMessage
                     });
 
