@@ -131,7 +131,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
         describe('visual content', () => {
 
-            xit('is comprised of <Message /> components based on what gets placed on the state', () => {
+            xit('is comprised of <Message /> components (NOTE: no need for a `markAsRead` prop) based on what gets placed on the state', () => {
 
                 // This will set the component's local state.
                 inboxWrapper.setState({messages: randomMessages});
