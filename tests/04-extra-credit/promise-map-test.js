@@ -28,11 +28,8 @@ describe('▒▒▒ Extra Credit tests ▒▒▒', function () {
             Promise.all = null;
         });
 
-        xit('is a function', () => {
+        xit('is a function that returns a promise', () => {
             expect(Promise.map).to.be.a('function');
-        });
-
-        xit('returns a promise', () => {
             const returnValue = Promise.map(['./package.json'], () => true);
             expect(returnValue).to.be.an.instanceof(Promise);
         });
