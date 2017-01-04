@@ -7,6 +7,8 @@ import chaiEnzyme from 'chai-enzyme';
 chai.use(chaiEnzyme());
 import {shallow} from 'enzyme';
 import {spy} from 'sinon';
+import sinonChai from 'sinon-chai';
+chai.use(sinonChai);
 import faker from 'faker';
 
 import Message from '../../react/components/Message';
@@ -95,11 +97,13 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
             xit('when clicked, invokes a function passed in as the markAsRead property with the message id', () => {
 
+                expect(markAsReadSpy).not.to.have.been.called;
+
                 // This will trigger any onClick handlers registered to the component.
                 messageWrapper.simulate('click');
 
-                expect(markAsReadSpy.called).to.be.true;
-                expect(markAsReadSpy.calledWith(messageData.id)).to.be.true;
+                expect(markAsReadSpy).to.have.been.called;
+                expect(markAsReadSpy).to.have.been.calledWith(messageData.id);
 
             });
 
@@ -194,8 +198,8 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             // This will trigger any onSubmit handlers registered to the component.
             newMessageFormWrapper.simulate('submit');
 
-            expect(sendSpy.called).to.be.true;
-            expect(sendSpy.calledWith(formInfo)).to.be.true;
+            expect(sendSpy).to.have.been.called;
+            expect(sendSpy).to.have.been.calledWith(formInfo);
 
         });
 
