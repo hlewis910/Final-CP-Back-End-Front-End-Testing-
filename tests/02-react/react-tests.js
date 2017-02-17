@@ -395,6 +395,16 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                         expect(componentState.messages).to.be.deep.equal([]);
                     });
 
+                    /**
+                     * SPECIAL NOTE
+                     *
+                     * The specific way we are testing components means that they get *ready* to
+                     * mount, but never *actually* become mounted. In other words, the
+                     * `componentDidMount` hook will never run, though certain other hooks may
+                     * run. For the sake of this checkpoint, you may use those other hooks
+                     * instead, even if you wouldn't use them in a real app.
+                     */
+
                     xit('is subscribed to changes from the redux store and always reflects state accurately', () => {
 
                         actualStore.dispatch(createLoadingAction());
