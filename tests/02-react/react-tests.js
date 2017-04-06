@@ -173,15 +173,15 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             });
 
             const recipientInput = newMessageFormWrapper.find('#recipient-field');
-            recipientInput.simulate('change', {target: {value: 'joe@fullstackacademy.com'}});
+            recipientInput.simulate('change', {target: {value: 'joe@fullstackacademy.com', name: 'recipient'}});
             expect(newMessageFormWrapper.state().recipient).to.be.equal('joe@fullstackacademy.com');
 
             const subjectInput = newMessageFormWrapper.find('#subject-field');
-            subjectInput.simulate('change', {target: {value: 'Hello?'}});
+            subjectInput.simulate('change', {target: {value: 'Hello?', name: 'subject'}});
             expect(newMessageFormWrapper.state().subject).to.be.equal('Hello?');
 
             const bodyInput = newMessageFormWrapper.find('#body-field');
-            bodyInput.simulate('change', {target: {value: `Is it me you're looking for?`}});
+            bodyInput.simulate('change', {target: {value: `Is it me you're looking for?`, name: 'body'}});
             expect(newMessageFormWrapper.state().body).to.be.equal(`Is it me you're looking for?`);
 
         });
