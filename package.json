@@ -4,8 +4,8 @@
   "author": "Fullstack Instructors",
   "scripts": {
     "test": "mocha ./tests --recursive --watch --compilers js:babel-register",
-    "server-test": "mocha ./tests/01-backend --watch --compilers js:babel-register",
-    "react-test": "mocha ./tests/02-react --watch --compilers js:babel-register",
+    "react-test": "mocha ./tests/01-react --watch --compilers js:babel-register",
+    "server-test": "mocha ./tests/02-backend --watch --compilers js:babel-register",
     "js-test": "mocha ./tests/03-js --watch --compilers js:babel-register",
     "extra-credit": "mocha ./tests/04-extra-credit --watch --compilers js:babel-register",
     "db-init": "pg-init checkpoint_senior",

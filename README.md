@@ -6,9 +6,9 @@ Except for existing *codebases* (from workshops / checkpoints / projects you've 
 
 Please make sure you complete specs located in the following files:
 
-`tests/01-backend/backend-tests.js`
+`tests/01-react/react-tests.js`
 
-`tests/02-react/react-tests.js`
+`tests/02-backend/backend-tests.js`
 
 `tests/03-js/flatline-test.js`
 
