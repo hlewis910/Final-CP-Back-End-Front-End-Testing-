@@ -121,7 +121,8 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
         let inboxWrapper;
         beforeEach('Create <Inbox />', () => {
-            inboxWrapper = shallow(<Inbox />);
+            inboxWrapper = shallow(<Inbox />, {context: {store: actualStore}});
+            inboxWrapper.instance().componentDidMount();
         });
 
         xit('starts with an initial state having an empty messages array', () => {
@@ -197,7 +198,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             newMessageFormWrapper.setState(formInfo);
 
             // This will trigger any onSubmit handlers registered to the component.
-            newMessageFormWrapper.simulate('submit');
+            newMessageFormWrapper.simulate('submit', {preventDefault: () => {}});
 
             expect(sendSpy).to.have.been.called;
             expect(sendSpy).to.have.been.calledWith(formInfo);
@@ -306,6 +307,12 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
             describe('reducing on MESSAGES_RECEIVED', () => {
 
+                beforeEach('initialize the store to be loading messages', () => {
+                    testingStore.replaceReducer(() => ({...testingStore.getState(), messagesLoading: false}));
+                    testingStore.dispatch({type: 'INITIALIZE_FOR_MESSAGES_RECEIVED_TEST'});
+                    testingStore.replaceReducer(rootReducer);
+                });
+
                 xit('affects the state by setting messagesLoading to false and messages to dispatched messages', () => {
 
                     const randomMessages = testUtilities.createRandomMessages(10);
@@ -386,7 +393,8 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
                     let inboxWrapper;
                     beforeEach('Get an <Inbox />', () => {
-                        inboxWrapper = shallow(<Inbox />);
+                        inboxWrapper = shallow(<Inbox />, {context: {store: actualStore}});
+                        inboxWrapper.instance().componentDidMount();
                     });
 
                     xit('has an initial local state that reflects the current store state', () => {
