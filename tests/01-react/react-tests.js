@@ -122,7 +122,10 @@ describe('▒▒▒ React tests ▒▒▒', function () {
         let inboxWrapper;
         beforeEach('Create <Inbox />', () => {
             inboxWrapper = shallow(<Inbox />, {context: {store: actualStore}});
-            inboxWrapper.instance().componentDidMount();
+            // we're simulating the component mounting by simply calling the `componentDidMountMethod` for this component (if you've defined one)
+            if (inboxWrapper.instance().componentDidMount) {
+                inboxWrapper.instance().componentDidMount();
+            }
         });
 
         xit('starts with an initial state having an empty messages array', () => {
@@ -394,7 +397,10 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     let inboxWrapper;
                     beforeEach('Get an <Inbox />', () => {
                         inboxWrapper = shallow(<Inbox />, {context: {store: actualStore}});
-                        inboxWrapper.instance().componentDidMount();
+                        // we're simulating the component mounting by simply calling the `componentDidMountMethod` for this component (if you've defined one)
+                        if (inboxWrapper.instance().componentDidMount) {
+                            inboxWrapper.instance().componentDidMount();
+                        }
                     });
 
                     xit('has an initial local state that reflects the current store state', () => {
@@ -402,16 +408,6 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                         expect(componentState.messagesLoading).to.be.false;
                         expect(componentState.messages).to.be.deep.equal([]);
                     });
-
-                    /**
-                     * SPECIAL NOTE
-                     *
-                     * The specific way we are testing components means that they get *ready* to
-                     * mount, but never *actually* become mounted. In other words, the
-                     * `componentDidMount` hook will never run, though certain other hooks may
-                     * run. For the sake of this checkpoint, you may use those other hooks
-                     * instead, even if you wouldn't use them in a real app.
-                     */
 
                     xit('is subscribed to changes from the redux store and always reflects state accurately', () => {
 
