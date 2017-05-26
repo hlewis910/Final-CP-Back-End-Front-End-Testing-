@@ -15,7 +15,7 @@ import Message from './message-model';
     These aliases will be important to remember and reference throughout
     the server portion of the checkpoint.
 
-    http://docs.sequelizejs.com/en/v3/docs/associations/#naming-strategy
+    http://docs.sequelizejs.com/manual/tutorial/associations.html#naming-strategy
  */
 Message.belongsTo(User, { as: 'to' });
 Message.belongsTo(User, { as: 'from' });
