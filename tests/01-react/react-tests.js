@@ -35,11 +35,18 @@ const testUtilities = {
     createOneRandomMessage: () => createRandomMessages(1)[0]
 };
 
+// NOTE: these specs use vanilla React & Redux — no React-Redux.
+
 describe('▒▒▒ React tests ▒▒▒', function () {
 
     describe('Message', () => {
 
         describe('visual content', () => {
+
+            // Before every `it` spec, we instantiate a new `Message` react component.
+            // `Message` comes from the react/components/Message.js file.
+            // This component will receive some data in its `fullMessage` prop.
+            // We store this component in a testable wrapper, `messageWrapper`.
 
             let messageData, messageWrapper;
             beforeEach('Create <Message /> wrapper', () => {
@@ -50,8 +57,14 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     subject: 'In re: curriculum updates',
                     body: 'We should teach React!'
                 };
-                messageWrapper = shallow(<Message fullMessage={messageData}/>);
+                // creates the testable React component
+                messageWrapper = shallow(<Message fullMessage={messageData} />);
             });
+
+            // These specs are relatively promitive — all we are asking you to
+            // do is to fill in each JSX tag (h1, h2, etc.) in the `render`
+            // method to match the HTML string shown. You can pass these in a
+            // "trivial" way, but look five or so specs down for a twist…
 
             xit('includes "FROM" line as an h1', () => {
                 expect(messageWrapper.find('h1')).to.have.html('<h1>From: <span>dan.sohval@fullstackacademy.com</span></h1>');
@@ -69,6 +82,12 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                 expect(messageWrapper.find('p')).to.have.html('<p>We should teach React!</p>');
             });
 
+            // This spec requires more understanding of JSX / React.
+            // Here we are demonstrating that your `render` method shouldn't
+            // always return the exact same strings in its JSX; instead, the result
+            // should vary based on the passed-in data. Where does that data come from?
+            // How do you get access to it? Go back to the `beforeEach` block to see.
+
             xit('is not hardcoded', () => {
                 const aDifferentMessage = {
                     id: 6,
@@ -77,7 +96,8 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     subject: 'Re: In re: curriculum updates',
                     body: 'Sounds awesome'
                 };
-                const differentMessageWrapper = shallow(<Message fullMessage={aDifferentMessage}/>);
+                // we make a new component with this different data, and check its contents
+                const differentMessageWrapper = shallow(<Message fullMessage={aDifferentMessage} />);
                 expect(differentMessageWrapper.find('h1')).to.have.html('<h1>From: <span>ashi@gracehopperacademy.com</span></h1>');
                 expect(differentMessageWrapper.find('h2')).to.have.html('<h2>To: <span>dan.sohval@fullstackacademy.com</span></h2>');
                 expect(differentMessageWrapper.find('h3')).to.have.html('<h3>Subject: <span>Re: In re: curriculum updates</span></h3>');
@@ -88,22 +108,36 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
         describe('interactivity', () => {
 
+            // Now we build a `Message` component with multiple props. Most
+            // notably, we are passing a *spy* function into the `markAsRead`
+            // prop. Spies let us test how a function ends up being used.
+
             let messageData, messageWrapper, markAsReadSpy;
             beforeEach('Create <Message />', () => {
                 messageData = testUtilities.createOneRandomMessage();
                 // http://sinonjs.org/docs/#spies
                 markAsReadSpy = spy();
-                messageWrapper = shallow(<Message fullMessage={messageData} markAsRead={markAsReadSpy}/>);
+                messageWrapper = shallow(<Message fullMessage={messageData} markAsRead={markAsReadSpy} />);
             });
+
+            // Read both the description and `expect`s carefully. You should know
+            // how to attach a click handler which calls a function with specific
+            // arguments.
 
             xit('when clicked, invokes a function passed in as the markAsRead property with the message id', () => {
 
-                expect(markAsReadSpy).not.to.have.been.called;
+                // The function passed into `markAsRead` should not be called immediately.
+                expect(markAsReadSpy).not.to.have.been.called; // eslint-disable-line
 
                 // This will trigger any onClick handlers registered to the component.
                 messageWrapper.simulate('click');
 
-                expect(markAsReadSpy).to.have.been.called;
+                // When the component is clicked, we want the function passed into
+                // `markAsRead` to be invoked.
+                expect(markAsReadSpy).to.have.been.called; // eslint-disable-line
+
+                // Not only invoked, but invoked with the right arguments. Don't get
+                // too stubborn – move on if you are having problems.
                 expect(markAsReadSpy).to.have.been.calledWith(messageData.id);
 
             });
@@ -119,6 +153,9 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             randomMessages = testUtilities.createRandomMessages(10)
         });
 
+        // Once again, we are making a testable React component. This time,
+        // it's our `Inbox` component.
+
         let inboxWrapper;
         beforeEach('Create <Inbox />', () => {
             inboxWrapper = shallow(<Inbox />, {context: {store: actualStore}});
@@ -128,6 +165,8 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             }
         });
 
+        // How (or where) do you define the initial state of a React component?
+
         xit('starts with an initial state having an empty messages array', () => {
             const currentState = inboxWrapper.state();
             expect(currentState.messages).to.be.deep.equal([]);
@@ -135,16 +174,19 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
         describe('visual content', () => {
 
+            // Don't worry about `markAsRead` — that doesn't apply to this suite!
+
             xit('is comprised of <Message /> components (NOTE: no need for a `markAsRead` prop) based on what gets placed on the state', () => {
 
-                // This will set the component's local state.
+                // This will alter the component's *local state* (i.e. `this.state`).
                 inboxWrapper.setState({messages: randomMessages});
+                // There should now be a bunch of Message components in the output.
                 expect(inboxWrapper.find(Message)).to.have.length(10);
 
                 // The first message displayed in the inbox should be based off of the
                 // first element in the randomMessages array.
                 const firstMessage = inboxWrapper.find(Message).at(0);
-                expect(firstMessage.equals(<Message fullMessage={randomMessages[0]}/>)).to.be.true;
+                expect(firstMessage.equals(<Message fullMessage={randomMessages[0]} />)).to.be.true; // eslint-disable-line
 
                 // This will set the component's local state.
                 inboxWrapper.setState({messages: randomMessages.slice(4)});
@@ -165,7 +207,9 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
         let newMessageFormWrapper;
         beforeEach('Create <NewMessageForm /> wrapper', () => {
-            newMessageFormWrapper = shallow(<NewMessageForm onSend={sendSpy}/>);
+            // notice: we are making a NewMessageForm with an `onSend` prop,
+            // set to a function.
+            newMessageFormWrapper = shallow(<NewMessageForm onSend={sendSpy} />);
         });
 
         xit('sets local state when inputs change', () => {
@@ -176,8 +220,16 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                 body: ''
             });
 
+            // Remember forms? We have some elements which are changing. How do you:
+            // 1) detect and react to a change in a form element?
+            // 2) get the value of the resulting event?
+            // 3) update the component's state appropriately?
+
+            // Test spec is finding a specific form field
             const recipientInput = newMessageFormWrapper.find('#recipient-field');
+            // Now we cause a change, with some new data
             recipientInput.simulate('change', {target: {value: 'joe@fullstackacademy.com', name: 'recipient'}});
+            // The component should have updated its state accordingly
             expect(newMessageFormWrapper.state().recipient).to.be.equal('joe@fullstackacademy.com');
 
             const subjectInput = newMessageFormWrapper.find('#subject-field');
@@ -189,6 +241,10 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             expect(newMessageFormWrapper.state().body).to.be.equal(`Is it me you're looking for?`);
 
         });
+
+        // This next spec is going to cause the form to "submit". When that
+        // happens, the component should 1) invke the `onSend` prop, and 2)
+        // pass in the component's current state.
 
         xit('invokes passed in `onSend` function with local state when form is submitted', () => {
 
@@ -203,7 +259,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             // This will trigger any onSubmit handlers registered to the component.
             newMessageFormWrapper.simulate('submit', {preventDefault: () => {}});
 
-            expect(sendSpy).to.have.been.called;
+            expect(sendSpy).to.have.been.called; // eslint-disable-line
             expect(sendSpy).to.have.been.calledWith(formInfo);
 
         });
@@ -214,14 +270,20 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
         describe('action creators', () => {
 
+            // Action creators are functions which return action objects.
+
             describe('createMessagesReceivedAction', () => {
 
                 xit('returns expected action description', () => {
 
                     const messages = testUtilities.createRandomMessages(5);
 
+                    // Here we call the `createMessagesReceivedAction` action
+                    // with some messages.
                     const actionDescriptor = createMessagesReceivedAction(messages);
 
+                    // The action creator should have returned an action object
+                    // just like this object literal:
                     expect(actionDescriptor).to.be.deep.equal({
                         type: MESSAGES_RECEIVED,
                         messages: messages
@@ -264,6 +326,9 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
         });
 
+        // Remember, reducers receive old state and an action object, and
+        // return a new state.
+
         describe('store/reducer', () => {
 
             let testingStore;
@@ -273,21 +338,27 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
             xit('has an initial state as described', () => {
                 const currentStoreState = testingStore.getState();
+                // Our initial state has two properties as shown.
                 expect(currentStoreState.messagesLoading).to.be.equal(false);
                 expect(currentStoreState.messages).to.be.deep.equal([]);
             });
+
+            // "on MESSAGES_LOADING" means when an action of that type is dispatched.
 
             describe('reducing on MESSAGES_LOADING', () => {
 
                 xit('affects state by setting messagesLoading to true and messages to empty array', () => {
 
+                    // an action is dispatched…
                     testingStore.dispatch({
                         type: MESSAGES_LOADING
                     });
 
                     const newState = testingStore.getState();
 
-                    expect(newState.messagesLoading).to.be.true;
+                    // and lo, the state has changed! The reducer function is
+                    // responsible for generating the new state.
+                    expect(newState.messagesLoading).to.be.true; // eslint-disable-line
                     expect(newState.messages).to.be.deep.equal([]);
 
                 });
@@ -301,6 +372,9 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     });
 
                     const subsequentStoreState = testingStore.getState();
+
+                    // Remember how to copy properties into new objects?
+                    // You should not be modifying a previous Redux state!
 
                     expect(currentStoreState).to.not.be.equal(subsequentStoreState);
 
@@ -327,7 +401,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
                     const newState = testingStore.getState();
 
-                    expect(newState.messagesLoading).to.be.false;
+                    expect(newState.messagesLoading).to.be.false; // eslint-disable-line
                     expect(newState.messages).to.be.deep.equal(randomMessages);
 
                 });
@@ -341,6 +415,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     existingRandomMessages = testUtilities.createRandomMessages(5);
                     testingStore = createStore(
                         rootReducer,
+                        // this just sets the initial state of our store.
                         {messagesLoading: false, messages: existingRandomMessages}
                     );
                 });
@@ -357,6 +432,8 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                     const newState = testingStore.getState();
                     const lastMessageOnState = last(newState.messages);
 
+                    // the NEW_MESSAGE action, when reduced, results in a
+                    // message being added to the redux state's `messages` arr.
                     expect(newState.messages).to.have.length(6);
                     expect(lastMessageOnState).to.be.deep.equal(dispatchedMessage);
 
@@ -374,6 +451,9 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
                     const newState = testingStore.getState();
 
+                    // Once again, don't mutate old data! Generate new data
+                    // that looks the way you want. There are many ways to do
+                    // so with arrays.
                     expect(newState.messages).to.not.be.equal(originalState.messages);
                     expect(originalState.messages).to.have.length(5);
 
@@ -403,9 +483,12 @@ describe('▒▒▒ React tests ▒▒▒', function () {
                         }
                     });
 
+                    // Where / how do you initialize local state? How do yuo
+                    // get store state?
+
                     xit('has an initial local state that reflects the current store state', () => {
                         const componentState = inboxWrapper.state();
-                        expect(componentState.messagesLoading).to.be.false;
+                        expect(componentState.messagesLoading).to.be.false; // eslint-disable-line
                         expect(componentState.messages).to.be.deep.equal([]);
                     });
 
@@ -415,7 +498,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
                         let currentComponentState = inboxWrapper.state();
 
-                        expect(currentComponentState.messagesLoading).to.be.true;
+                        expect(currentComponentState.messagesLoading).to.be.true; // eslint-disable-line
                         expect(currentComponentState.messages).to.be.deep.equal([]);
 
                         const randomMessages = testUtilities.createRandomMessages(10);
@@ -423,7 +506,7 @@ describe('▒▒▒ React tests ▒▒▒', function () {
 
                         currentComponentState = inboxWrapper.state();
 
-                        expect(currentComponentState.messagesLoading).to.be.false;
+                        expect(currentComponentState.messagesLoading).to.be.false; // eslint-disable-line
                         expect(currentComponentState.messages).to.be.deep.equal(randomMessages);
 
                         const randomNewMessage = testUtilities.createOneRandomMessage();

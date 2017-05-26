@@ -56,7 +56,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 // *Assertion translation*:
                 // This assertion expects that the Message model will
-                // put an `subject` column in the messages table.
+                // put a `subject` column in the messages table.
                 xit('has expected subject definition', () => {
                     expect(Message.attributes.subject).to.be.an('object');
                 });
@@ -331,6 +331,8 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
             describe('messages', () => {
 
+                // find all messages whose `to` field matches the variable ID
+
                 xit('serves up all messages to a specific user on GET /to/{{recipientId}}', () => {
                     return agent
                         .get(`/messages/to/${obama}`)
@@ -341,6 +343,8 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                             expect(res.body[0].body).to.be.equal('WAAASSUUUUPP??');
                         });
                 });
+
+                // find all messages whose `from` field matches the variable ID
 
                 xit('serves up all messages from a specific sender on GET /from/{{senderId}}', () => {
                     return agent
@@ -354,6 +358,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                         });
                 });
 
+                // remember eager loading?
 
                 xit('serves up all messages—WITH FILLED IN REFERENCES—to a specific user on GET /to/{{recipientId}}', () => {
                     return agent
