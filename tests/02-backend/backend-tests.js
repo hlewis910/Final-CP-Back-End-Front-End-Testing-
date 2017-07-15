@@ -178,7 +178,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                         xit('EAGERLY LOADS the full information of both the sender and receiver', () => {
 
-                            // http://docs.sequelizejs.com/en/latest/docs/models-usage/#eager-loading
+                            // http://sequelize.readthedocs.io/en/v3/docs/models-usage/#eager-loading
                             // Don't forget about the aliases explained in server/models/index.js!
 
                             return Message.getAllWhereSender(elsaId)
