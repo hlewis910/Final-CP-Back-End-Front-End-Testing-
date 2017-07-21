@@ -37,8 +37,10 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                 xit('require email', () => {
                     const user = User.build();
                     return user.validate()
-                        .then(err => {
-                            expect(err).to.be.an('object');
+                        .then(() => { throw new Error('Promise should have rejected');})
+                        .catch(err => {
+                            expect(err).to.exist;
+                            expect(err).to.be.an('error');
                             expect(err.errors).to.contain.a.thing.with.properties({
                                 path: 'email',
                                 type: 'notNull Violation'
@@ -82,8 +84,10 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                 xit('requires a body', () => {
                     const message = Message.build();
                     return message.validate()
-                        .then(err => {
-                            expect(err).to.be.an('object');
+                        .then(() => { throw new Error('Promise should have rejected');})
+                        .catch(err => {
+                            expect(err).to.exist;
+                            expect(err).to.be.an('error');
                             expect(err.errors).to.contain.a.thing.with.properties({
                                 path: 'body',
                                 type: 'notNull Violation'
