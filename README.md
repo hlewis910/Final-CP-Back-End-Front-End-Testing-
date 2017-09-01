@@ -16,10 +16,10 @@ Please make sure you complete specs located in the following files:
 
 ## Getting started
 
-**Fork** and clone this repository. Then execute the following to run all tests:
+**Fork** and clone this repository. Run `npm install`, then execute the following to run all tests:
 
 ```bash
-npm install
+npm test
 ```
 
 To run only _specific_ test suites, you can optionally do any of the following:
