@@ -10,7 +10,7 @@ import chaiThings from 'chai-things';
 chai.use(chaiProperties);
 chai.use(chaiThings);
 const expect = chai.expect;
-import supertest from 'supertest-as-promised';
+import supertest from 'supertest';
 import sinon from 'sinon';
 
 describe('▒▒▒ Backend tests ▒▒▒', () => {
