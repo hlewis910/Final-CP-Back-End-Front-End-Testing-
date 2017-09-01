@@ -230,15 +230,21 @@ describe('▒▒▒ React tests ▒▒▒', function () {
             // Now we cause a change, with some new data
             recipientInput.simulate('change', {target: {value: 'joe@fullstackacademy.com', name: 'recipient'}});
             // The component should have updated its state accordingly
-            expect(newMessageFormWrapper.state().recipient).to.be.equal('joe@fullstackacademy.com');
+            expect(newMessageFormWrapper.state()).to.have.property('recipient', 'joe@fullstackacademy.com')
+            expect(newMessageFormWrapper.state()).to.have.property('subject', '')
+            expect(newMessageFormWrapper.state()).to.have.property('body', '')
 
             const subjectInput = newMessageFormWrapper.find('#subject-field');
             subjectInput.simulate('change', {target: {value: 'Hello?', name: 'subject'}});
-            expect(newMessageFormWrapper.state().subject).to.be.equal('Hello?');
+            expect(newMessageFormWrapper.state()).to.have.property('recipient', 'joe@fullstackacademy.com')
+            expect(newMessageFormWrapper.state()).to.have.property('subject', 'Hello?')
+            expect(newMessageFormWrapper.state()).to.have.property('body', '')
 
             const bodyInput = newMessageFormWrapper.find('#body-field');
             bodyInput.simulate('change', {target: {value: `Is it me you're looking for?`, name: 'body'}});
-            expect(newMessageFormWrapper.state().body).to.be.equal(`Is it me you're looking for?`);
+            expect(newMessageFormWrapper.state()).to.have.property('recipient', 'joe@fullstackacademy.com')
+            expect(newMessageFormWrapper.state()).to.have.property('subject', 'Hello?')
+            expect(newMessageFormWrapper.state()).to.have.property('body', `Is it me you're looking for?`)
 
         });
 
