@@ -37,7 +37,7 @@ const testUtilities = {
 
 // NOTE: these specs use vanilla React & Redux — no React-Redux.
 
-describe('▒▒▒ React tests ▒▒▒', function () {
+describe('▒▒▒ Frontend tests ▒▒▒', function () {
 
     describe('Message', () => {
 
