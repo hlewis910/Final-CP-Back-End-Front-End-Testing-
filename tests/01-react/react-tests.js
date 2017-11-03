@@ -265,8 +265,10 @@ describe('▒▒▒ Frontend tests ▒▒▒', function () {
             // This will trigger any onSubmit handlers registered to the component.
             newMessageFormWrapper.simulate('submit', {preventDefault: () => {}});
 
+            expect(newMessageFormWrapper.find('form').prop('onSubmit')).to.be.a('function');
             expect(sendSpy).to.have.been.called; // eslint-disable-line
             expect(sendSpy).to.have.been.calledWith(formInfo);
+            expect(sendSpy.calledOnce).to.be.equal(true);
 
         });
 
