@@ -8,16 +8,16 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 
 ReactDOM.render(
 	<Router>
-  	<div>
-  		<Link to="/inbox">
-  			<button>Inbox</button>
-  		</Link>
-  		<Link to="/newMessage">
-  			<button>New Message</button>
-  		</Link>
-  	</div>
-  	<Route path="/inbox" component={Inbox} />
-  	<Route path="/newMessage" component={NewMessageForm} />
+		<div>
+			<Link to="/inbox">
+				<button>Inbox</button>
+			</Link>
+			<Link to="/newMessage">
+				<button>New Message</button>
+			</Link>
+		</div>
+		<Route path="/inbox" component={Inbox} />
+		<Route path="/newMessage" component={NewMessageForm} />
   </Router>,
   document.getElementById('app')
 );
