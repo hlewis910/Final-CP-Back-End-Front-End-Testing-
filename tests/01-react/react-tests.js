@@ -355,6 +355,16 @@ describe('▒▒▒ Frontend tests ▒▒▒', function () {
 
             describe('reducing on MESSAGES_LOADING', () => {
 
+                beforeEach('initialize the store to be loading messages', () => {
+                    testingStore.replaceReducer(() => ({
+                        ...testingStore.getState(),
+                        messagesLoading: false,
+                        messages: ['this', 'array', 'should', 'be', 'replaced'],
+                    }));
+                    testingStore.dispatch({type: 'INITIALIZE_FOR_MESSAGES_RECEIVED_TEST'});
+                    testingStore.replaceReducer(rootReducer);
+                });
+
                 xit('affects state by setting messagesLoading to true and messages to empty array', () => {
 
                     // an action is dispatched…
