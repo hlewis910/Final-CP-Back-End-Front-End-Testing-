@@ -393,7 +393,7 @@ describe('▒▒▒ Frontend tests ▒▒▒', function () {
             describe('reducing on MESSAGES_RECEIVED', () => {
 
                 beforeEach('initialize the store to be loading messages', () => {
-                    testingStore.replaceReducer(() => ({...testingStore.getState(), messagesLoading: false}));
+                    testingStore.replaceReducer(() => ({...testingStore.getState(), messagesLoading: true}));
                     testingStore.dispatch({type: 'INITIALIZE_FOR_MESSAGES_RECEIVED_TEST'});
                     testingStore.replaceReducer(rootReducer);
                 });
