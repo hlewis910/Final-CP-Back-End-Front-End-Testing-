@@ -1,9 +1,5 @@
 Welcome to your final checkpoint at Fullstack Academy!
 
-## Parts
-
-There are two parts to this Senior Checkpoint.  The first is administered through this Github Repo and the second part will be administered on HackerRank.  You should have received an invite in your e-mail (the one you use on LearnDot) to the "Senior Checkpoint Add-on" checkpoint from HackerRank.  If you have not, please reach out to your instructor/proctor immediately.
-
 ## Resources
 
 Except for existing *codebases* (from workshops / checkpoints / projects you've done, or library / solution code), you are allowed to use any resources you'd like. That includes all documentation and workshop *instructions*.  Remember, academic integrity violations (such as copying code from any other student (past or present) is grounds for dismissal from the program).
