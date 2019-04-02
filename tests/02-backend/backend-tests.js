@@ -34,18 +34,20 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 // *Assertion translation*:
                 // The `email` column should be a required field.
-                xit('require email', () => {
+                xit('require email', async () => {
                     const user = User.build();
-                    return user.validate()
-                        .then(() => { throw new Error('Promise should have rejected');})
-                        .catch(err => {
-                            expect(err).to.exist;
-                            expect(err).to.be.an('error');
-                            expect(err.errors).to.contain.a.thing.with.properties({
-                                path: 'email',
-                                type: 'notNull Violation'
-                            });
+                    try {
+                        await user.validate()
+                        throw new Error('Promise should have rejected')
+                    } catch (err) {
+                        /* handle error */
+                        expect(err).to.exist;
+                        expect(err).to.be.an('error');
+                        expect(err.errors).to.contain.a.thing.with.properties({
+                            path: 'email',
+                            type: 'notNull Violation'
                         });
+                    }
                 });
 
             });
@@ -81,18 +83,20 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                     expect(message.subject).to.be.equal('No Subject');
                 });
 
-                xit('requires a body', () => {
+                xit('requires a body', async () => {
                     const message = Message.build();
-                    return message.validate()
-                        .then(() => { throw new Error('Promise should have rejected');})
-                        .catch(err => {
-                            expect(err).to.exist;
-                            expect(err).to.be.an('error');
-                            expect(err.errors).to.contain.a.thing.with.properties({
-                                path: 'body',
-                                type: 'notNull Violation'
-                            });
+                    try {
+                        await message.validate()
+                        throw new Error('Promise should have rejected')
+                    }
+                    catch (err) {
+                        expect(err).to.exist;
+                        expect(err).to.be.an('error');
+                        expect(err.errors).to.contain.a.thing.with.properties({
+                            path: 'body',
+                            type: 'notNull Violation'
                         });
+                    }
                 });
 
             });
@@ -101,16 +105,14 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 let annaId;
                 let elsaId;
-                beforeEach('Seed users', () => {
+                beforeEach('Seed users', async () => {
                     const users = [
                         {email: 'anna@gmail.com'},
                         {email: 'elsa@gmail.com'}
                     ];
-                    return User.bulkCreate(users, {returning: true})
-                        .then(createdUsers => {
-                            annaId = createdUsers[0].id;
-                            elsaId = createdUsers[1].id;
-                        });
+                    const createdUsers = await User.bulkCreate(users, {returning: true})
+                    annaId = createdUsers[0].id;
+                    elsaId = createdUsers[1].id;
                 });
 
                 let annaFirstMessage;
@@ -139,12 +141,10 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                         }
                     ];
 
-                    return Message.bulkCreate(messages, {returning: true})
-                        .then(createdMessages => {
-                            annaFirstMessage = createdMessages[0].id;
-                            elsaFirstMessage = createdMessages[1].id;
-                            annaSecondMessage = createdMessages[2].id;
-                        });
+                    const createdMessages = Message.bulkCreate(messages, {returning: true})
+                    annaFirstMessage = createdMessages[0].id;
+                    elsaFirstMessage = createdMessages[1].id;
+                    annaSecondMessage = createdMessages[2].id;
 
                 });
 
@@ -162,44 +162,36 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                             expect(Message.getAllWhereSender(annaId).then).to.be.a('function');
                         });
 
-                        xit('resolves to all the messages sent by Anna', () => {
-                            return Message.getAllWhereSender(annaId)
-                                .then(messages => {
-                                    expect(messages.length).to.be.equal(2);
-                                    expect(messages).to.contain.a.thing.with.property('id', annaFirstMessage);
-                                    expect(messages).to.contain.a.thing.with.property('id', annaSecondMessage);
-                                });
+                        xit('resolves to all the messages sent by Anna', async () => {
+                            const messages = Message.getAllWhereSender(annaId)
+                            expect(messages.length).to.be.equal(2);
+                            expect(messages).to.contain.a.thing.with.property('id', annaFirstMessage);
+                            expect(messages).to.contain.a.thing.with.property('id', annaSecondMessage);
                         });
 
-                        xit('resolves to all the messages sent by Elsa', () => {
-                            return Message.getAllWhereSender(elsaId)
-                                .then(messages => {
-                                    expect(messages.length).to.be.equal(1);
-                                    expect(messages[0].id).to.be.equal(elsaFirstMessage);
-                                });
+                        xit('resolves to all the messages sent by Elsa', async () => {
+                            const messages = await Message.getAllWhereSender(elsaId)
+                            expect(messages.length).to.be.equal(1);
+                            expect(messages[0].id).to.be.equal(elsaFirstMessage);
                         });
 
 
-                        xit('EAGERLY LOADS the full information of both the sender and receiver', () => {
+                        xit('EAGERLY LOADS the full information of both the sender and receiver', async () => {
 
                             // http://sequelize.readthedocs.io/en/v3/docs/models-usage/#eager-loading
                             // Don't forget about the aliases explained in server/models/index.js!
 
-                            return Message.getAllWhereSender(elsaId)
-                                .then(messages => {
+                            const messages = await Message.getAllWhereSender(elsaId)
+                            const theMessage = messages[0];
 
-                                    const theMessage = messages[0];
+                            // Expect the first of the found messages to have `to` and `from` properties that are objects.
+                            expect(theMessage.to).to.be.an('object');
+                            expect(theMessage.from).to.be.an('object');
 
-                                    // Expect the first of the found messages to have `to` and `from` properties that are objects.
-                                    expect(theMessage.to).to.be.an('object');
-                                    expect(theMessage.from).to.be.an('object');
-
-                                    // Expect the email properties of those objects to match up to the
-                                    // associated users who sent/received the message.
-                                    expect(theMessage.to.email).to.be.equal('anna@gmail.com');
-                                    expect(theMessage.from.email).to.be.equal('elsa@gmail.com');
-
-                                });
+                            // Expect the email properties of those objects to match up to the
+                            // associated users who sent/received the message.
+                            expect(theMessage.to.email).to.be.equal('anna@gmail.com');
+                            expect(theMessage.from.email).to.be.equal('elsa@gmail.com');
                         });
 
                     });
@@ -258,22 +250,20 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
             let obama;
             let biden;
-            beforeEach('Seed users', () => {
+            beforeEach('Seed users', async () => {
                 const users = [
                     {email: 'obama@gmail.com'},
                     {email: 'biden@gmail.com'}
                 ];
-                return User.bulkCreate(users, {returning: true})
-                    .then(createdUsers => {
-                        obama = createdUsers[0].id;
-                        biden = createdUsers[1].id;
-                    });
+                const createdUsers = User.bulkCreate(users, {returning: true})
+                obama = createdUsers[0].id;
+                biden = createdUsers[1].id;
             });
 
             let obamaFirstMessage;
             let bidenFirstMessage;
             let obamaSecondMessage;
-            beforeEach('Seed messages', () => {
+            beforeEach('Seed messages', async () => {
 
                 const messages = [
                     {
@@ -293,43 +283,35 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                     }
                 ];
 
-                return Message.bulkCreate(messages, {returning: true})
-                    .then(createdMessages => {
-                        obamaFirstMessage = createdMessages[0].id;
-                        bidenFirstMessage = createdMessages[1].id;
-                        obamaSecondMessage = createdMessages[2].id;
-                    });
+                const createdMessages = await Message.bulkCreate(messages, {returning: true})
+                obamaFirstMessage = createdMessages[0].id;
+                bidenFirstMessage = createdMessages[1].id;
+                obamaSecondMessage = createdMessages[2].id;
 
             });
 
             describe('users', () => {
 
-                xit('serves up all users on request to GET /', () => {
-                    return agent
-                        .get('/users')
-                        .expect(200)
-                        .then(res => {
-                            expect(res.body).to.be.an('array');
-                            expect(res.body.length).to.be.equal(2);
-                            expect(res.body).to.contain.a.thing.with('id', obama);
-                            expect(res.body).to.contain.a.thing.with('id', biden);
-                        });
+                xit('serves up all users on request to GET /', async () => {
+                    const res = await agent.get('/users').expect(200)
+                    expect(res.status).to.be.equal(200)
+                    expect(res.body).to.be.an('array');
+                    expect(res.body.length).to.be.equal(2);
+                    expect(res.body).to.contain.a.thing.with('id', obama);
+                    expect(res.body).to.contain.a.thing.with('id', biden);
                 });
 
-                xit('updates a user at PUT /{{usersId}}, sending a 201 response', () => {
-                    return agent
+                xit('updates a user at PUT /{{usersId}}, sending a 201 response', async () => {
+                    const res = await agent
                         .put(`/users/${obama}`)
                         .send({
                             email: 'potus@hotmail.com'
                         })
-                        .expect(201)
-                        .then(res => {
-                            return User.findById(obama);
-                        })
-                        .then(user => {
-                            expect(user.email).to.be.equal('potus@hotmail.com');
-                        });
-                });
+                        .expect(201);
+
+                    const user = await User.findById(obama);
+                    expect(user.email).to.be.equal('potus@hotmail.com');
+              });
 
             });
 
@@ -337,87 +319,74 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 // find all messages whose `to` field matches the variable ID
 
-                xit('serves up all messages to a specific user on GET /to/{{recipientId}}', () => {
-                    return agent
+                xit('serves up all messages to a specific user on GET /to/{{recipientId}}', async () => {
+                    const res = await agent
                         .get(`/messages/to/${obama}`)
-                        .expect(200)
-                        .then(res => {
-                            expect(res.body).to.be.an('array');
-                            expect(res.body.length).to.be.equal(1);
-                            expect(res.body[0].body).to.be.equal('WAAASSUUUUPP??');
-                        });
+                        .expect(200);
+                    expect(res.body).to.be.an('array');
+                    expect(res.body.length).to.be.equal(1);
+                    expect(res.body[0].body).to.be.equal('WAAASSUUUUPP??');
                 });
 
                 // find all messages whose `from` field matches the variable ID
 
-                xit('serves up all messages from a specific sender on GET /from/{{senderId}}', () => {
-                    return agent
+                xit('serves up all messages from a specific sender on GET /from/{{senderId}}', async () => {
+                    const res = await agent
                         .get(`/messages/from/${obama}`)
-                        .expect(200)
-                        .then(res => {
-                            expect(res.body).to.be.an('array');
-                            expect(res.body.length).to.be.equal(2);
-                            expect(res.body).to.contain.a.thing.with.property('body', 'HEYOOOOOOO');
-                            expect(res.body).to.contain.a.thing.with.property('body', 'nmu?');
-                        });
+                        .expect(200);
+                    expect(res.body).to.be.an('array');
+                    expect(res.body.length).to.be.equal(2);
+                    expect(res.body).to.contain.a.thing.with.property('body', 'HEYOOOOOOO');
+                    expect(res.body).to.contain.a.thing.with.property('body', 'nmu?');
                 });
 
                 // remember eager loading?
 
-                xit('serves up all messages—WITH FILLED IN REFERENCES—to a specific user on GET /to/{{recipientId}}', () => {
-                    return agent
+                xit('serves up all messages—WITH FILLED IN REFERENCES—to a specific user on GET /to/{{recipientId}}', async () => {
+                    const res = await agent
                         .get(`/messages/to/${obama}`)
-                        .expect(200)
-                        .then(res => {
-                            expect(res.body).to.be.an('array');
-                            expect(res.body.length).to.be.equal(1);
-                            expect(res.body[0].from.email).to.be.equal('biden@gmail.com');
-                            expect(res.body[0].to.email).to.be.equal('obama@gmail.com');
-                        });
+                        .expect(200);
+                    expect(res.body).to.be.an('array');
+                    expect(res.body.length).to.be.equal(1);
+                    expect(res.body[0].from.email).to.be.equal('biden@gmail.com');
+                    expect(res.body[0].to.email).to.be.equal('obama@gmail.com');
                 });
 
                 xit(`serves up all messages from a specific sender on GET /from/{{senderId}}
-                    and uses the Message model static getAllWhereSender in the process`, () => {
+                    and uses the Message model static getAllWhereSender in the process`, async () => {
 
                     // http://sinonjs.org/docs/#spies
                     const getAllWhereSenderSpy = sinon.spy(Message, 'getAllWhereSender');
 
-                    return agent
+                    const res = agent
                         .get(`/messages/from/${obama}`)
-                        .expect(200)
-                        .then(res => {
+                        .expect(200);
 
-                            expect(res.body).to.be.an('array');
-                            expect(res.body.length).to.be.equal(2);
+                    expect(res.body).to.be.an('array');
+                    expect(res.body.length).to.be.equal(2);
 
-                            expect(getAllWhereSenderSpy.called).to.be.equal(true);
-                            expect(getAllWhereSenderSpy.calledWith(obama.toString())).to.be.equal(true);
+                    expect(getAllWhereSenderSpy.called).to.be.equal(true);
+                    expect(getAllWhereSenderSpy.calledWith(obama.toString())).to.be.equal(true);
 
-                            getAllWhereSenderSpy.restore();
-
-                        });
+                    getAllWhereSenderSpy.restore();
 
                 });
 
-                xit('adds a new message on POST /, responding with 201 and created message', () => {
+                xit('adds a new message on POST /, responding with 201 and created message', async () => {
 
-                    return agent
+                    const res = agent
                         .post('/messages')
                         .send({
                             fromId: biden,
                             toId: obama,
                             body: 'You are my best friend. I hope you know that.'
                         })
-                        .expect(201)
-                        .then(res => {
-                            const createdMessage = res.body;
-                            return Message.findById(createdMessage.id)
-                        })
-                        .then(foundMessage => {
-                            expect(foundMessage.body).to.be.equal('You are my best friend. I hope you know that.');
-                        });
+                        .expect(201);
+                    const createdMessage = res.body;
+                    const foundMessage = await Message.findById(createdMessage.id)
+                    expect(foundMessage.body).to.be.equal('You are my best friend. I hope you know that.');
 
-                });
+              });
 
             });
 
