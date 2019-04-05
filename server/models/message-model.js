@@ -22,7 +22,7 @@ Message.getAllWhereSender = (id) => {
       fromId: id
     },
     include: [ { model: User, as: 'from' },
-              { model: User, as:'to' }
+              { model: User, as: 'to' }
             ]
     })
   }

@@ -1,10 +1,10 @@
 import React from 'react';
 
 export default class extends React.Component {
-    constructor(props) {
+    constructor() {
         super()
         this.state = {
-            recipient: '',
+            recipient: this.state.recipient,
             subject: '',
             body: ''
         }
@@ -27,10 +27,10 @@ export default class extends React.Component {
     }
 
     render() {
-        
+
         return (
-            // <form onSubmit={this.handleSubmit}>
-            <form onSubmit={() => onSend(this.state)}>
+             <form onSubmit={this.handleSubmit}>
+            {/* <form onSubmit={() => onSend(this.state)}> */}
                 <div className="form-group">
                     <label>To:</label>
                     <input onChange={this.handleChange} type="text" id="recipient-field" name="recipient" value={this.state.recipient} />
