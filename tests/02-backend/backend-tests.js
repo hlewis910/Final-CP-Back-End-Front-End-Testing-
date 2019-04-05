@@ -26,7 +26,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
             // *Assertion translation*:
             // This assertion expects that the User model will
             // put an `email` column in the users table.
-            xit('has the expected schema definition', () => {
+            it('has the expected schema definition', () => {
                 expect(User.attributes.email).to.be.an('object');
             });
 
@@ -34,7 +34,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 // *Assertion translation*:
                 // The `email` column should be a required field.
-                xit('require email', async () => {
+                it('require email', async () => {
                     const user = User.build();
                     try {
                         await user.validate()
@@ -61,14 +61,14 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                 // *Assertion translation*:
                 // This assertion expects that the Message model will
                 // put a `subject` column in the messages table.
-                xit('has expected subject definition', () => {
+                it('has expected subject definition', () => {
                     expect(Message.attributes.subject).to.be.an('object');
                 });
 
                 // *Assertion translation*:
                 // This assertion expects that the Message model will
                 // put an `body` column in the messages table.
-                xit('has expected body definition', () => {
+                it('has expected body definition', () => {
                     expect(Message.attributes.body).to.be.an('object');
                 });
 
@@ -76,14 +76,14 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
             describe('validations', () => {
 
-                xit('defaults subject to "No Subject"', () => {
+                it('defaults subject to "No Subject"', () => {
                     // .build creates an instance of a model
                     // without saving the represented data to the database.
                     const message = Message.build();
                     expect(message.subject).to.be.equal('No Subject');
                 });
 
-                xit('requires a body', async () => {
+                it('requires a body', async () => {
                     const message = Message.build();
                     try {
                         await message.validate()
@@ -118,7 +118,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                 let annaFirstMessage;
                 let elsaFirstMessage;
                 let annaSecondMessage;
-                beforeEach('Seed messages', () => {
+                beforeEach('Seed messages', async () => {
 
                     const messages = [
                         {
@@ -141,7 +141,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                         }
                     ];
 
-                    const createdMessages = Message.bulkCreate(messages, {returning: true})
+                    const createdMessages = await Message.bulkCreate(messages, {returning: true})
                     annaFirstMessage = createdMessages[0].id;
                     elsaFirstMessage = createdMessages[1].id;
                     annaSecondMessage = createdMessages[2].id;
@@ -154,29 +154,29 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                     // before attempting the following assertions.
                     describe('getAllWhereSender', () => {
 
-                        xit('exists', () => {
+                        it('exists', () => {
                             expect(Message.getAllWhereSender).to.be.a('function');
                         });
 
-                        xit('returns a promise', () => {
+                        it('returns a promise', () => {
                             expect(Message.getAllWhereSender(annaId).then).to.be.a('function');
                         });
 
-                        xit('resolves to all the messages sent by Anna', async () => {
-                            const messages = Message.getAllWhereSender(annaId)
+                        it('resolves to all the messages sent by Anna', async () => {
+                            const messages = await Message.getAllWhereSender(annaId)
                             expect(messages.length).to.be.equal(2);
                             expect(messages).to.contain.a.thing.with.property('id', annaFirstMessage);
                             expect(messages).to.contain.a.thing.with.property('id', annaSecondMessage);
                         });
 
-                        xit('resolves to all the messages sent by Elsa', async () => {
+                        it('resolves to all the messages sent by Elsa', async () => {
                             const messages = await Message.getAllWhereSender(elsaId)
                             expect(messages.length).to.be.equal(1);
                             expect(messages[0].id).to.be.equal(elsaFirstMessage);
                         });
 
 
-                        xit('EAGERLY LOADS the full information of both the sender and receiver', async () => {
+                        it('EAGERLY LOADS the full information of both the sender and receiver', async () => {
 
                             // http://sequelize.readthedocs.io/en/v3/docs/models-usage/#eager-loading
                             // Don't forget about the aliases explained in server/models/index.js!
@@ -212,11 +212,11 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                             });
                         });
 
-                        xit('exists', () => {
+                        it('exists', () => {
                             expect(testMessage.truncateSubject).to.be.a('function');
                         });
 
-                        xit('returns the full message object but with a limited subject text based on a passed in number to determine its length', () => {
+                        it('returns the full message object but with a limited subject text based on a passed in number to determine its length', () => {
                             // Here we are expecting that the *return value* of .truncateSubject()
                             // is *full instance object of message* with its .subject property altered.
                             const messageWithTruncatedSubject = testMessage.truncateSubject(12);
@@ -225,7 +225,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                             expect(messageWithTruncatedSubject.subject).to.be.equal(`I don't know`);
                         });
 
-                        xit('adds an ellipses (...) after the truncated text if true is passed as the second argument', () => {
+                        it('adds an ellipses (...) after the truncated text if true is passed as the second argument', () => {
                             expect(testMessage.truncateSubject(4, true).subject).to.be.equal('I do...');
                         });
 
@@ -255,7 +255,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                     {email: 'obama@gmail.com'},
                     {email: 'biden@gmail.com'}
                 ];
-                const createdUsers = User.bulkCreate(users, {returning: true})
+                const createdUsers = await User.bulkCreate(users, {returning: true})
                 obama = createdUsers[0].id;
                 biden = createdUsers[1].id;
             });
@@ -292,7 +292,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
             describe('users', () => {
 
-                xit('serves up all users on request to GET /', async () => {
+                it('serves up all users on request to GET /', async () => {
                     const res = await agent.get('/users').expect(200)
                     expect(res.status).to.be.equal(200)
                     expect(res.body).to.be.an('array');
@@ -301,7 +301,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                     expect(res.body).to.contain.a.thing.with('id', biden);
                 });
 
-                xit('updates a user at PUT /{{usersId}}, sending a 201 response', async () => {
+                it('updates a user at PUT /{{usersId}}, sending a 201 response', async () => {
                     const res = await agent
                         .put(`/users/${obama}`)
                         .send({
@@ -319,7 +319,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 // find all messages whose `to` field matches the variable ID
 
-                xit('serves up all messages to a specific user on GET /to/{{recipientId}}', async () => {
+                it('serves up all messages to a specific user on GET /to/{{recipientId}}', async () => {
                     const res = await agent
                         .get(`/messages/to/${obama}`)
                         .expect(200);
@@ -330,7 +330,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 // find all messages whose `from` field matches the variable ID
 
-                xit('serves up all messages from a specific sender on GET /from/{{senderId}}', async () => {
+                it('serves up all messages from a specific sender on GET /from/{{senderId}}', async () => {
                     const res = await agent
                         .get(`/messages/from/${obama}`)
                         .expect(200);
@@ -342,7 +342,7 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 // remember eager loading?
 
-                xit('serves up all messages—WITH FILLED IN REFERENCES—to a specific user on GET /to/{{recipientId}}', async () => {
+                it('serves up all messages—WITH FILLED IN REFERENCES—to a specific user on GET /to/{{recipientId}}', async () => {
                     const res = await agent
                         .get(`/messages/to/${obama}`)
                         .expect(200);
@@ -352,13 +352,13 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
                     expect(res.body[0].to.email).to.be.equal('obama@gmail.com');
                 });
 
-                xit(`serves up all messages from a specific sender on GET /from/{{senderId}}
+                it(`serves up all messages from a specific sender on GET /from/{{senderId}}
                     and uses the Message model static getAllWhereSender in the process`, async () => {
 
                     // http://sinonjs.org/docs/#spies
                     const getAllWhereSenderSpy = sinon.spy(Message, 'getAllWhereSender');
 
-                    const res = agent
+                    const res = await agent
                         .get(`/messages/from/${obama}`)
                         .expect(200);
 
@@ -372,9 +372,9 @@ describe('▒▒▒ Backend tests ▒▒▒', () => {
 
                 });
 
-                xit('adds a new message on POST /, responding with 201 and created message', async () => {
+                it('adds a new message on POST /, responding with 201 and created message', async () => {
 
-                    const res = agent
+                    const res = await agent
                         .post('/messages')
                         .send({
                             fromId: biden,
